@@ -1,0 +1,67 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+@model MealPlanner.Models.Meal
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+   
+</div>
+<div style="width: 100%; display: table;">
+    <div style="display: table-row;">
+        
+        <div style="width: 30%; display: table-cell;">
+            <h2>Add Meals</h2>
+            <form style="margin: 5%;" asp-action="GetMealsTolist">
+                <input class="form-control" type="text" placeholder="search for meals" asp-for="Name"/>
+                <input type="submit" />
+            </form>
+            <table border="1" width="39%" >
+            <tr>  
+                <td width="33%">  
+                    Row1,Col1  
+                </td>  
+                <td width="33%">  
+                    Row1,Col2  
+                </td>  
+                <td width="34%">  
+                    Row1,Col3  
+                </td>  
+            </tr>
+        </table>
+        <a asp-asp-controller="Home" asp-action="CreateMeal" class="btn btn-secondary">Create New Meal</a> 
+        </div>
+        <div style="width: 30%; display: table-cell;">
+            <h2>Add Meals</h2>
+            <table border="1" width="39%" >
+                <tr>  
+                <td width="33%">  
+                    Row1,Col1  
+                </td>  
+                <td width="33%">  
+                    Row1,Col2  
+                </td>  
+                <td width="34%">  
+                    Row1,Col3  
+                </td>  
+            </tr>
+        </table>
+        </div>
+        <div style="width: 30%; display: table-cell;">
+            <h2>Add Meals</h2>
+            <table border="1" width="39%" >
+                <tr>  
+                <td width="33%">  
+                    Row1,Col1  
+                </td>  
+                <td width="33%">  
+                    Row1,Col2  
+                </td>  
+                <td width="34%">  
+                    Row1,Col3  
+                </td>  
+            </tr>
+        </table>
+        </div>
+        
+    </div>
+</div>
