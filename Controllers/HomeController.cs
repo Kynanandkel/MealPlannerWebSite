@@ -1,18 +1,27 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using MealPlanner.Models;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Data.SqlClient;
+using System.Data;
+
+
 
 namespace MealPlanner.Controllers;
 
 public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
+    private ApplicationDbContext _context;
 
-    public HomeController(ILogger<HomeController> logger)
+    public HomeController(ILogger<HomeController> logger,ApplicationDbContext context)
     {
         _logger = logger;
+        _context = context;
+        ViewBag.Ingredients = new List<Ingredient>();
     }
 
+    
     public IActionResult Index()
     {
         return View();
@@ -25,12 +34,21 @@ public class HomeController : Controller
 
     public IActionResult CreateMeal()
     {
-        return View();
+        CreateMealViewModel mealViewModel = new CreateMealViewModel();
+        mealViewModel.Ingredients = _context.ingredient.ToList();
+
+        return View(mealViewModel);
     }
 
-    public IActionResult GetMealsTolist(Meal meal)
+    [HttpGet]
+    public IActionResult list()
     {
-        return RedirectToAction("Index");
+        
+
+        List<Ingredient> result = _context.ingredient.ToList();
+        TempData["ingredients"] = result.ToList();
+
+        return Redirect("index");
     }
 
     public IActionResult Privacy()

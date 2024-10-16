@@ -1,18 +1,143 @@
 @{
     ViewData["Title"] = "Create Meal";
 }
-@model MealPlanner.Models.Meal
+@model MealPlanner.Models.CreateMealViewModel
 <div class="text-center">
     <h1 class="display-4">Create Meal</h1>
     
 </div>
 
-<form>
-  <label>Id</label>
-  <input class="form-control" type="number" placeholder="0" asp-for="Id"/>
-  
-  <label class="mt-4">Name</label>
-  <input class="form-control" type="text" placeholder="name" asp-for="Name"/>
+<div style="width: 100%; display: table;">
+    <div style="display: table-row;">
 
-  <button class="btn btn-primary mt-4" type="submit">Add Meal</button>
-</form>
+        <div style="width: 30%; display: table-cell;">
+            <h1>Ingredients List</h1>
+            <form asp-action="SearchIngredientForm" asp-controller="CreateMeal">
+                <input type="text" name="IngredientName" id="IngName" />
+                <button class="btn btn-primary" type="submit">search</button>
+                
+
+            </form>
+            <Table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>AddToMeal</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+
+                        
+                        List<Ingredient> ingredients;
+                        if (TempData["IngredientName"] is null)
+                        {
+                            ingredients = Model.Ingredients;
+                        }
+                        else
+                        {
+                            string IngredientName = TempData["IngredientName"] as string;
+                            ingredients = Model.Ingredients.Where(i => i.Name.ToLower() == IngredientName.ToLower()).Select(i => i).ToList(); ;
+                        }
+
+                        
+
+
+                        if (!(ingredients is null))
+
+                        {
+
+                            foreach (var ingredient in ingredients)
+
+                            {
+                                <tr>
+                                    <td>@ingredient.Name</td>
+                                    <td>
+                                        <form asp-action="AddIngredientToMeal" asp-controller="CreateMeal">
+                                            <button class="btn btn-primary" type="submit">Add To Meal</button>
+                                            <input type="hidden" id="IngredientId" name="IngredientId" value="@ingredient.ID" />
+                                        </form>
+                                    </td>
+                                </tr>
+                            }
+
+                        }
+                    }
+                </tbody>
+            </Table>
+        </div>
+        <div style="width: 30%; display: table-cell;">
+            <h1>Meal</h1>
+            <form method="post" action="">
+                <input type="text" name="IngredientName" value="Meal name" />
+                <input type="submit" value="Add meal" class="submit />"
+
+            </form>
+            <Table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>AddToMeal</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+
+                        if (Model.MealIngredients is null)
+                        {
+                            Model.MealIngredients = new List<Ingredient>();    
+                        }
+                        if (TempData["IngredientIDRemove"] is not null && (int)TempData["IngredientIDRemove"] >= 0)
+                        {
+                            int removeId = (int)TempData["IngredientIDRemove"];
+                            Ingredient ingredient = Model.Ingredients.Where(i => i.ID == removeId).Select(i => i).First();
+                            Model.MealIngredients.Remove(ingredient);
+
+                        }
+                        else
+                        {
+
+                            if (TempData["IngredientID"] is null)
+                            {
+
+                                if (Model.MealIngredients is null)
+                                {
+                                    Model.MealIngredients = new List<Ingredient>();
+                                }
+                            }
+                            else
+                            {
+                                int IngredientId = (int)TempData["IngredientID"];
+                                Ingredient ingredient = Model.Ingredients.Where(i => i.ID == IngredientId).Select(i => i).First();
+                                TempData["MealIngredient"] = ingredient;
+
+                            }
+                        }
+                        TempData["IngredientIDRemove"] = -1;
+                        if (!(TempData["mealIngredients"] is null))
+
+                        {
+                            var test = TempData["mealIngredients"];
+                            var mealIngredients = (int[]) TempData["mealIngredients"];
+                            foreach (var ingredientID in mealIngredients)
+                            {
+                                <tr>
+                                    <td>@Model.Ingredients.Where(i => i.ID == ingredientID).Select(i=>i).First().Name</td>
+                                    <td>
+                                        <form asp-action="RemoveIngredientFromMeal" asp-controller="CreateMeal">
+                                            <button class="btn btn-primary" type="submit">Remove Ingredient</button>
+                                            <input type="hidden" id="IngredientId" name="IngredientId" value="@Model.Ingredients.Where(i => i.ID == ingredientID).Select(i=>i).First().ID" />
+                                        </form>
+                                    </td>
+                                </tr>
+                            }
+
+                        }
+                    }
+                </tbody>
+            </Table>
+            
+        </div>
+
+    </div>
+</div>
