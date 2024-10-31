@@ -1,6 +1,7 @@
 ﻿using MealPlanner.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Newtonsoft.Json;
 using System.Diagnostics;
 
 namespace MealPlanner.Controllers
@@ -10,7 +11,6 @@ namespace MealPlanner.Controllers
         private readonly ILogger<HomeController> _logger;
         private ApplicationDbContext _context;
         private List<Ingredient> _ingredients;
-        private List<int> _mealIngredients;
 
         public CreateMealController(ILogger<HomeController> logger, ApplicationDbContext context)
         {
@@ -26,48 +26,21 @@ namespace MealPlanner.Controllers
             return View();
         }
         
-        [HttpGet]
-        public IActionResult list(string name)
-        {
-            
-
-            return Redirect("index");
-        }
-
         public IActionResult Privacy()
         {
             return View();
         }
 
-        [HttpPost]
-        public IActionResult SearchIngredientForm(string IngredientName)
-        {
-            
-            TempData["IngredientName"] = IngredientName;
-            return RedirectToAction("CreateMeal", "Home");
-        }
-
-        [HttpPost]
-        public IActionResult AddIngredientToMeal(int IngredientId)
-        {
-            if (_mealIngredients is null) 
-            {
-                _mealIngredients = new List<int>();
-            }
-            _mealIngredients.Add(IngredientId);
-            TempData["mealIngredients"] = _mealIngredients.ToArray();
-            TempData.Keep();
-            return RedirectToAction("CreateMeal", "Home");
-        }
-
-        [HttpPost]
-        public IActionResult RemoveIngredientFromMeal(int IngredientId)
+        public IActionResult AddNewMeal(string MealName, string MealIngredients)
         {
 
-            TempData["IngredientIDRemove"] = IngredientId;
+            List<MealIngredient> mealIngredients = JsonConvert.DeserializeObject<List<MealIngredient>>(MealIngredients);
+
+            _context.meal.Add(new Meal() { Name = MealName, MealIngredients = mealIngredients });
+            _context.SaveChanges();
+
             return RedirectToAction("CreateMeal", "Home");
         }
-
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

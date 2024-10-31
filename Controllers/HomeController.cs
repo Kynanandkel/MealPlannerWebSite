@@ -40,17 +40,6 @@ public class HomeController : Controller
         return View(mealViewModel);
     }
 
-    [HttpGet]
-    public IActionResult list()
-    {
-        
-
-        List<Ingredient> result = _context.ingredient.ToList();
-        TempData["ingredients"] = result.ToList();
-
-        return Redirect("index");
-    }
-
     public IActionResult Privacy()
     {
         return View();

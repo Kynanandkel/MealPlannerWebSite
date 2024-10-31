@@ -14,39 +14,4 @@
     
    
 </div>
-<div style="width: 100%; display: table;">
-    <div style="display: table-row;">
-        
-        <div style="width: 30%; display: table-cell;">
-            <Table>
-                <thead>
-                 <tr>
-                    <th>Name</th>
-                    <th>AddToMeal</th>
-                 </tr>
-                </thead>
-                <tbody>@{
-                        var test = TempData["ingredients"];
-                        
-                        if (!(test is null))
-                        { 
-                            foreach (var ingredient in ViewBag.Ingredients )
-                            {
-                                <tr>
-                                    <td>@ingredient.Name</td>
-                                </tr>
-                            }
-                        }
-                    }
-                </tbody>
-             </Table>
-        </div>
-        <div style="width: 30%; display: table-cell;">
-            
-        </div>
-        <div style="width: 30%; display: table-cell;">
-            
-        </div>
-        
-    </div>
-</div>
+
