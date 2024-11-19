@@ -28,12 +28,12 @@ namespace MealPlanner.Models
             {
                 entity.HasKey(mi => new {mi.mealId , mi.ingredientId });
 
-                entity.HasOne(mi => mi.meal).
+                entity.HasOne(mi => mi.mealId).
                 WithMany(m => m.MealIngredients).
                 HasForeignKey(mi => mi.mealId).
                 OnDelete(DeleteBehavior.NoAction);
 
-                entity.HasOne(mi => mi.ingredient).
+                entity.HasOne(mi => mi.ingredientId).
                 WithMany(m => m.MealIngredients).
                 HasForeignKey(mi => mi.ingredientId).
                 OnDelete(DeleteBehavior.NoAction);

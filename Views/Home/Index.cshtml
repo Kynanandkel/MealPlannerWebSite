@@ -1,17 +1,73 @@
-﻿@{
+﻿@using System.Text.Json
+@{
     ViewData["Title"] = "Home Page";
 }
-@model MealPlanner.Models.Meal
+@model MealPlanner.Models.IndexViewModel
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-
-   
-    <form asp-action="CreateMeal" asp-controller="home">
-            <input type="text" name="IngredientName" id="IngName" />
-            <button class="btn btn-primary" type="submit">search</button>
-
-     </form>
+    <h1 class="display-4">Create Meal</h1>
     
-   
 </div>
+@{
+    List<Meal> Meals = Model.Meals.ToList();
+    var jsonMeals = "{";
+    foreach (Meal meal in Meals)
+    {
+        var jsonMealName = JsonSerializer.Serialize(meal.Name);
+        var jsonMealIngreidents = JsonSerializer.Serialize(meal.MealIngredients);
+        jsonMeals = "{[\"Meal Name\":" + "\"" + jsonMealName + "\"]";
+    }
+}
+
+<body onload="onLoad();">
+    <script>
+        
+    </script>
+
+    <div style="width: 100%; display: table">
+        <div style="display: table-row;">
+            <div style="width: 30%; display: table-cell;">
+                
+                <input type="text" id="IngredientSearch" name="IngredientSearch" />
+                <button id="Search" onclick="FindIngredient(getElementById('IngredientSearch').value)">Search</button>
+                <table id="IngredientSearchList">
+                    <tr>
+                        <td>
+                            Ingredient Name
+                        </td>
+                        <td>
+                        </td>
+                    </tr>
+                   <!-- <tr> <td><p1>Element.Name</p1> </td ><td><button name='Element.NameButton' onclick='AddIngredient(Element.Name,Element.ID)'>Add Ingredient</button> </td> </tr> -->
+                </table>
+            </div>
+
+
+            <div style="width: 70%; display: table-cell;">
+                
+                <div name="MealIngredients" id="testtest">
+                    <form asp-action="AddNewMeal" asp-controller="CreateMeal">
+                        <h1 style="align-self: center">Meal</h1>
+                        <input style="align-self: center" type="text" name="MealName" id="MealName" value="Meal name" />
+                        <p></p>
+                        <input style="align-self: center" type="submit" value="Add meal" class="submit" />
+                        <input id="MealIngredientsInput" name="MealIngredients" type="hidden" value="" />
+                    </form>
+                    <table id="MealIngredients">
+                        <tr>
+                            <td>
+                                Ingredient Name
+                            </td>
+                            <td>
+                            </td>
+                        </tr>
+                    </table>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+    
+</body>
+
+
 

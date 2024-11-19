@@ -13,18 +13,27 @@ public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
     private ApplicationDbContext _context;
+    private List<Meal> _meals;
 
     public HomeController(ILogger<HomeController> logger,ApplicationDbContext context)
     {
         _logger = logger;
         _context = context;
-        ViewBag.Ingredients = new List<Ingredient>();
+        _meals = context.meal.ToList();
+        
     }
 
     
     public IActionResult Index()
     {
-        return View();
+        IndexViewModel indexModel = new IndexViewModel();
+        indexModel.Meals = _context.meal.ToList();
+
+        var test = _context.mealIngredient.ToList();
+
+
+
+        return View(indexModel);
     }
 
     public IActionResult Meals()
