@@ -1,17 +1,164 @@
-﻿@{
+﻿@using System.Text.Json
+@{
     ViewData["Title"] = "Home Page";
 }
-@model MealPlanner.Models.Meal
+@model MealPlanner.Models.IndexViewModel
+<head>
+
+    <form asp-action="CreateMeal" asp-controller="Home">
+        <input style="align-self: center" type="submit" value="Add meal" class="submit" />
+    </form>
+
+</head>
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-
-   
-    <form asp-action="CreateMeal" asp-controller="home">
-            <input type="text" name="IngredientName" id="IngName" />
-            <button class="btn btn-primary" type="submit">search</button>
-
-     </form>
+    <h1 class="display-4">Create Meal</h1>
     
-   
 </div>
+@{
+    var jsonMeals = JsonSerializer.Serialize(Model.meals);
+    { }
+}
+
+
+<body onload="onLoad();">
+    <script>
+        var allMeals = JSON.parse('@Html.Raw(jsonMeals)');
+        let chosenMeals = [];
+        let chosenIngredients = [];
+        function onLoad() {
+            displayMeals(allMeals);
+        }
+
+        function displayMeals(array) {
+
+            var MealList = "";
+            array.forEach(Element => {
+                MealList += " <tr> <td><p1>" + Element.Name + "</p1> </td ><td><button name=' " + Element.Name + "Button' onclick='AddMeal(\"" + Element.Name + "\"," + Element.ID + ")'>Add Meal</button> </td> </tr > ";
+            });
+
+            document.getElementById("MealSearchList").innerHTML = MealList;
+        }
+
+        function FindMeal(IngToFind) {
+
+            if (IngToFind === "") {
+                displayMeals(allMeals);
+            }
+            else {
+                let SearchArray = []
+
+                allMeals.forEach(Element => {
+                    if (Element.Name.toLowerCase().includes(IngToFind.toLowerCase())) 
+                    {
+                        SearchArray.push(Element);
+                    }
+                })
+                displayMeals(SearchArray);
+            }
+
+        }
+
+        function AddMeal(Name, ID) {
+            
+            var Meal = allMeals.filter(function (x) { return x.ID === ID });
+            
+            chosenMeals.push(Meal);
+
+            chosenIngredients.push(...Meal[0].MealIngredients);
+
+            
+
+            var simplifiedIngredients = [];
+            chosenIngredients.forEach(Ingredient => 
+            {
+                if (simplifiedIngredients.length === 0) 
+                {
+                    console.log("herer1")
+                    simplifiedIngredients.push(Ingredient);
+                }
+
+                let found = false;
+                simplifiedIngredients.forEach(simpIng => 
+                {
+                    console.log(simpIng.IngredientId)
+                    console.log(Ingredient.IngredientId)
+
+                    if ((simpIng.IngredientId === Ingredient.IngredientId)) 
+                    {
+                        simpIng.ammount += Ingredient.ammount;
+                        found = true;
+                        return;
+                    }
+                })
+                if(!found)
+                {
+                    console.log("here3")
+                    simplifiedIngredients.push(Ingredient);
+                }
+            })
+            console.log(Meal[0].MealIngredients)
+            console.log(chosenIngredients);
+            console.log(simplifiedIngredients);
+
+
+
+            
+
+            //var ingredient = { IngredientId: ID, Name: Name, Format: "Tbspn", Ammount: 1 };
+
+           
+            
+            //DisplayChosenMeals();
+            //document.getElementById("MealIngredientsInput").value = JSON.stringify(ChosenMeals);
+        }
+
+    </script>
+
+    <div style="width: 100%; display: table">
+        <div style="display: table-row;">
+            <div style="width: 30%; display: table-cell;">
+                
+                <input type="text" id="MealSearch" name="IngredientSearch" />
+                <button id="Search" onclick="FindMeal(getElementById('MealSearch').value)">Search</button>
+                <table id="MealSearchList">
+                    <tr>
+                        <td>
+                            Meal Name
+                        </td>
+                        <td>
+                        </td>
+                    </tr>
+                   <!-- <tr> <td><p1>Element.Name</p1> </td ><td><button name='Element.NameButton' onclick='AddIngredient(Element.Name,Element.ID)'>Add Ingredient</button> </td> </tr> -->
+                </table>
+            </div>
+
+
+            <div style="width: 70%; display: table-cell;">
+                
+                <div name="MealIngredients" id="testtest">
+                    <form asp-action="AddNewMeal" asp-controller="CreateMeal">
+                        <h1 style="align-self: center">Meal</h1>
+                        <input style="align-self: center" type="text" name="MealName" id="MealName" value="Meal name" />
+                        <p></p>
+                        <input style="align-self: center" type="submit" value="Add meal" class="submit" />
+                        <input id="MealIngredientsInput" name="MealIngredients" type="hidden" value="" />
+                    </form>
+                    <table id="MealIngredients">
+                        <tr>
+                            <td>
+                                Ingredient Name
+                            </td>
+                            <td>
+                            </td>
+                        </tr>
+                    </table>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+    
+</body>
+
+
 

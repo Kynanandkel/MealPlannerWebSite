@@ -15,12 +15,14 @@
 <body onload="onLoad();">
     <script>
         var allIngredients = JSON.parse('@Html.Raw(json)');
-        console.log(allIngredients)
+
         let mealIngredients = [];
+
         function onLoad()
         { 
             DisplayList(allIngredients);
         }
+
         function DisplayList(array) {
             
             var IngredientList = "";
@@ -32,6 +34,7 @@
 
             console.log(array.length);
         }
+
         function DisplayMealIngredients()
         {
             document.getElementById("MealIngredients").innerHTML = "";
@@ -58,6 +61,7 @@
                 document.getElementById("select" + i).value = mealIngredients[i].Format;
             }
         }
+
         function FindIngredient(IngToFind) 
         {
             if (IngToFind === "") 
@@ -69,8 +73,7 @@
                 let SearchArray = []
 
                 allIngredients.forEach(Element => {
-                    if (Element.Name.toLowerCase() === IngToFind.toLowerCase()) 
-                    {
+                    if (Element.Name.toLowerCase().includes(IngToFind.toLowerCase())) {
                         SearchArray.push(Element);  
                     
                     } 
@@ -79,6 +82,7 @@
             }
         
         }
+
         function AddIngredient(Name, ID) 
         {
             var ingredient = { IngredientId: ID, Name: Name, Format: "Tbspn", Ammount: 1};
@@ -86,22 +90,26 @@
             DisplayMealIngredients();
             document.getElementById("MealIngredientsInput").value = JSON.stringify(mealIngredients);
         }
+
         function RemoveIngredient(i) 
         {
             mealIngredients.splice(i, 1);
             DisplayMealIngredients();
             document.getElementById("MealIngredientsInput").value = JSON.stringify(mealIngredients);
         }
+
         function SetFormat(i)
         {
             mealIngredients[i].Format = document.getElementById("select" + i).value;
             document.getElementById("MealIngredientsInput").value = JSON.stringify(mealIngredients);
         }
+
         function SetAmmount(i) 
         {
             mealIngredients[i].Ammount = document.getElementById("value" + i).value;
             document.getElementById("MealIngredientsInput").value = JSON.stringify(mealIngredients);
         }
+
     </script>
 
     <div style="width: 100%; display: table">

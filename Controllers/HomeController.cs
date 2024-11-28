@@ -12,19 +12,19 @@ namespace MealPlanner.Controllers;
 public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
-    private ApplicationDbContext _context;
+    private List<Meal> _meals;
 
-    public HomeController(ILogger<HomeController> logger,ApplicationDbContext context)
+    public HomeController(ILogger<HomeController> logger)
     {
         _logger = logger;
-        _context = context;
-        ViewBag.Ingredients = new List<Ingredient>();
+        
     }
 
     
     public IActionResult Index()
     {
-        return View();
+        IndexViewModel model = new IndexViewModel();
+        return View(model);
     }
 
     public IActionResult Meals()
@@ -34,10 +34,9 @@ public class HomeController : Controller
 
     public IActionResult CreateMeal()
     {
-        CreateMealViewModel mealViewModel = new CreateMealViewModel();
-        mealViewModel.Ingredients = _context.ingredient.ToList();
+        CreateMealViewModel model = new CreateMealViewModel();
 
-        return View(mealViewModel);
+        return View(model);
     }
 
     public IActionResult Privacy()

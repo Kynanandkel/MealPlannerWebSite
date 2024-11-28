@@ -1,16 +1,15 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 
 namespace MealPlanner.Models
 {
     public class MealIngredient
     {
-        public Meal meal { get; set; }
+        public int IngredientId { get; set; }
 
-        public int mealId { get; set; }
+        public string IngredientName { get; set; }
 
-        public Ingredient ingredient { get; set; }
-        public int ingredientId { get; set; }
 
         [Column(TypeName = "Float")]
         public float ammount { get; set; }
