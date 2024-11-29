@@ -38,6 +38,12 @@ public class HomeController : Controller
 
         return View(model);
     }
+    public IActionResult CreateIngredient()
+    {
+        CreateMealViewModel model = new CreateMealViewModel();
+
+        return View(model);
+    }
 
     public IActionResult Privacy()
     {

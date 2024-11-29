@@ -45,7 +45,7 @@ namespace MealPlanner.Controllers
                 db.Execute($"EXEC dbo.sp_AdMealIngredientToMeal @MealID = {mealId}, @IngredientId = {ingredient.IngredientId}, @Ammount = {ingredient.ammount}, @format = '{ingredient.format}'");
             }
 
-            return RedirectToAction("CreateMeal", "Home");
+            return RedirectToAction("Index", "Home");
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

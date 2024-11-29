@@ -1,0 +1,27 @@
+﻿@using System.Text.Json
+@{
+    ViewData["Title"] = "Create Meal";
+}
+@model MealPlanner.Models.CreateMealViewModel
+<div class="text-center">
+    <h1 class="display-4">Create Meal</h1>
+
+</div>
+@{
+    List<Ingredient> ingList = Model.Ingredients;
+    var json = JsonSerializer.Serialize(ingList);
+}
+<body>
+
+    <div name="MealIngredients" id="testtest">
+        <form asp-action="AddNewMeal" asp-controller="CreateIngredient">
+            <h1 style="align-self: center">Ingredient</h1>
+            <input style="align-self: center" type="text" name="IngredientName" id="IngredientName" value="Ingredient name" />
+            <p></p>
+            <input style="align-self: center" type="submit" value="Create Ingredient" class="submit" />
+        </form>
+    </div>
+
+</body>
+
+
