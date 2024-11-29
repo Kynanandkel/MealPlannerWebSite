@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ﻿using System.Data;
 using MealPlanner.Models;
 
@@ -46,6 +47,16 @@ namespace MealPlanner.Models
             }
             meals.Add(meal);
         }
+=======
+﻿namespace MealPlanner.Models
+{
+    public class IndexViewModel
+    { 
+
+        public List<Meal> Meals { get; set; }
+
+        public List<Ingredient> Ingredients { get; set; }
+>>>>>>> 9d96919263e07075b85f283aa87710a701bdcca8
         
     }
 }
