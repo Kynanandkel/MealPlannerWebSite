@@ -39,7 +39,15 @@ namespace MealPlanner.Models
                     {
                         ID = curId,
                         Name = row.Field<string>("mealName")
+
                     };
+                    meal.MealIngredients.Add(new MealIngredient()
+                    {
+                        IngredientId = row.Field<int>("ingredientid"),
+                        IngredientName = row.Field<string>("ingredientName"),
+                        ammount = (float)row.Field<double>("ammount"),
+                        format = row.Field<string>("format")
+                    });
                 }
 
                 oldId = curId;

@@ -22,22 +22,28 @@
 
 <body onload="onLoad();">
     <script>
-        var allMeals = JSON.parse('@Html.Raw(jsonMeals)');
-        let chosenMeals = [];
-        let chosenIngredients = [];
+        const allMeals = JSON.parse('@Html.Raw(jsonMeals)');
+        console.log(@Html.Raw(jsonMeals));
+        //console.log(allMeals);
+
+        var chosenMeals = [];
+        var chosenIngredients = [];
+
         function onLoad() {
             displayMeals(allMeals);
         }
 
         function displayMeals(array) {
 
-            var MealList = "";
+            let MealList = "";
             array.forEach(Element => {
                 MealList += " <tr> <td><p1>" + Element.Name + "</p1> </td ><td><button name=' " + Element.Name + "Button' onclick='AddMeal(\"" + Element.Name + "\"," + Element.ID + ")'>Add Meal</button> </td> </tr > ";
             });
 
             document.getElementById("MealSearchList").innerHTML = MealList;
         }
+
+        
 
         function FindMeal(IngToFind) {
 
@@ -59,57 +65,58 @@
         }
 
         function AddMeal(Name, ID) {
-            
-            var Meal = allMeals.filter(function (x) { return x.ID === ID });
-            
-            chosenMeals.push(Meal);
 
-            chosenIngredients.push(...Meal[0].MealIngredients);
+            chosenIngredients = []
 
-            
+            chosenMeals.push({ ID: ID, Name: Name });
 
-            var simplifiedIngredients = [];
-            chosenIngredients.forEach(Ingredient => 
-            {
-                if (simplifiedIngredients.length === 0) 
+            for (let i = 0; i < chosenMeals.length; i++) {
+                var Ingr = allMeals.find((meal) => meal.ID === chosenMeals[i].ID).MealIngredients;
+                
+                for (let j = 0; j < Ingr.length; j++) 
                 {
-                    console.log("herer1")
-                    simplifiedIngredients.push(Ingredient);
+                    
+                    AddIngredient(Ingr[j].IngredientId, Ingr[j].IngredientName, Ingr[j].format, Ingr[j].ammount);
                 }
-
-                let found = false;
-                simplifiedIngredients.forEach(simpIng => 
-                {
-                    console.log(simpIng.IngredientId)
-                    console.log(Ingredient.IngredientId)
-
-                    if ((simpIng.IngredientId === Ingredient.IngredientId)) 
-                    {
-                        simpIng.ammount += Ingredient.ammount;
-                        found = true;
-                        return;
-                    }
-                })
-                if(!found)
-                {
-                    console.log("here3")
-                    simplifiedIngredients.push(Ingredient);
-                }
-            })
-            console.log(Meal[0].MealIngredients)
-            console.log(chosenIngredients);
-            console.log(simplifiedIngredients);
-
-
-
+              
+            }
             
-
-            //var ingredient = { IngredientId: ID, Name: Name, Format: "Tbspn", Ammount: 1 };
-
            
+
+            let IngredientDisplay = "";
+            let MealDisplay = ""
+
+            chosenIngredients.forEach(ingr => 
+            {
+                IngredientDisplay += " <tr> <td><p1>" + ingr.Name + "</p1> </td ><td><p1>" + ingr.ammount + "</p1> </td ><td><p1>" + ingr.format + "</p1> </td > </tr > "
+            })
+
+            chosenMeals.forEach(meal =>
+            {
+                MealDisplay += " <tr> <td><p1>" + meal.Name + "</p1> </td ><td><button name=' " + meal.Name + "Button' onclick='RemoveMeal(\"" + meal.Name + "\"," + meal.ID + ")'>Remove meal Meal</button> </td> </tr > ";
+            })
+           
+            document.getElementById("IngredientList").innerHTML = IngredientDisplay;
+            document.getElementById("MealList").innerHTML = MealDisplay;
+
+        }
+        function AddIngredient(ID, Name, Format, Ammount) 
+        {
             
-            //DisplayChosenMeals();
-            //document.getElementById("MealIngredientsInput").value = JSON.stringify(ChosenMeals);
+            let ingredient = chosenIngredients.find((Ingr) => Ingr.IngredientId === ID);
+            console.log(ingredient)
+
+            if (ingredient === undefined) 
+            {
+                
+                chosenIngredients.push({ IngredientId: ID, Name: Name, format: Format, ammount: Ammount });
+            }
+            else 
+            {
+                
+                ingredient.ammount += Ammount 
+            }
+            
         }
 
     </script>
@@ -133,27 +140,39 @@
             </div>
 
 
-            <div style="width: 70%; display: table-cell;">
+            <div style="width: 30%; display: table-cell;">
                 
-                <div name="MealIngredients" id="testtest">
-                    <form asp-action="AddNewMeal" asp-controller="CreateMeal">
-                        <h1 style="align-self: center">Meal</h1>
-                        <input style="align-self: center" type="text" name="MealName" id="MealName" value="Meal name" />
-                        <p></p>
-                        <input style="align-self: center" type="submit" value="Add meal" class="submit" />
-                        <input id="MealIngredientsInput" name="MealIngredients" type="hidden" value="" />
-                    </form>
-                    <table id="MealIngredients">
-                        <tr>
-                            <td>
-                                Ingredient Name
-                            </td>
-                            <td>
-                            </td>
-                        </tr>
-                    </table>
+                
+                <table id="MealList">
+                    <tr>
+                        <td>
+                            MealName
+                        </td>
+                        <td>
+
+                        </td>
+                    </tr>
+
+                </table>
                     
-                </div>
+               
+            </div>
+
+            <div style="width: 30%; display: table-cell;">
+
+
+                <table id="IngredientList">
+                    <tr>
+                        <td>
+                            Ingredient Name
+                        </td>
+                        <td>
+                        </td>
+                    </tr>
+
+                </table>
+
+
             </div>
         </div>
     </div>
