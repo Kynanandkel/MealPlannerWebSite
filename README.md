@@ -1,1 +1,1 @@
-Soon to be Meal oplanner website written in go for use to plan meals yum
+Soon to be meal planner website written in go for use to plan meals yum
