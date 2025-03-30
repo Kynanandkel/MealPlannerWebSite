@@ -28,47 +28,46 @@ Format VARCHAR(225)
 );
 
 
-DELIMITER //
+DELIMITER $
 -- add ingredient
-DROP PROCEDURE IF EXISTS mealPlannerDb.sp_CreateIngredient //
+DROP PROCEDURE IF EXISTS mealPlannerDb.sp_CreateIngredient $
 CREATE PROCEDURE mealPlannerDb.sp_CreateIngredient(name VARCHAR(225),tag VARCHAR(225))
 BEGIN
 	INSERT INTO mealPlannerDb.Ingredients(name, tag)
     VALUES(name, tag);
-END//
+END $
 -- get ingredients
-DROP PROCEDURE IF EXISTS mealPlannerDb.sp_GetIngredients //
-CREATE PROCEDURE mealPlannerDb.sp_GetIngredient(name VARCHAR(225),tag VARCHAR(225))
+DROP PROCEDURE IF EXISTS mealPlannerDb.sp_GetIngredients $
+CREATE PROCEDURE mealPlannerDb.sp_GetIngredients()
 BEGIN
-	SELECT * FROM mealPannerDb.Ingredients;
-END//
+	SELECT * FROM mealPlannerDb.Ingredients;
+END $
 -- add meal
-DROP PROCEDURE IF EXISTS mealPlannerDb.sp_CreateMeal //
+DROP PROCEDURE IF EXISTS mealPlannerDb.sp_CreateMeal $
 CREATE PROCEDURE mealPlannerDb.sp_CreateMeal(name VARCHAR(225),tag VARCHAR(225))
 BEGIN
 	INSERT INTO mealPlannerDb.Meals(name, tag)
     VALUES(name, tag);
     SELECT LAST_INSERT_ID(); 
-END//
+END $
 -- get meal
-DROP PROCEDURE IF EXISTS mealPlannerDb.sp_GetMeals //
-CREATE PROCEDURE mealPlannerDb.sp_GetMeals(name VARCHAR(225),tag VARCHAR(225))
+DROP PROCEDURE IF EXISTS mealPlannerDb.sp_GetMeals $
+CREATE PROCEDURE mealPlannerDb.sp_GetMeals()
 BEGIN
-	SELECT * FROM mealPannerDb.Meals;
-END//
+	SELECT * FROM mealPlannerDb.Meals;
+END $
 -- add ingredient to meal
-DROP PROCEDURE IF EXISTS mealPlannerDb.sp_AddIngredientToMeal //
+DROP PROCEDURE IF EXISTS mealPlannerDb.sp_AddIngredientToMeal $
 CREATE PROCEDURE mealPlannerDb.sp_AddIngredientToMeal(MealId INT,IngredientId INT,Ammount FLOAT,Format VARCHAR(225))
 BEGIN
 	INSERT INTO mealPlannerDb.MealIngredients(MealId,IngredientId,Ammount,Format)
     VALUES(MealId, IngredientId,Ammount,Format);
     
-END//
-
+END $
 
 -- get meal ingredients
-DROP PROCEDURE IF EXISTS mealPlannerDb.sp_GetMealIngrediens //
-CREATE PROCEDURE mealPlannerDb.sp_GetMealIngredients(MealId INT)
+DROP PROCEDURE IF EXISTS mealPlannerDb.sp_GetMealIngredients $
+CREATE PROCEDURE mealPlannerDb.sp_GetMealIngredients()
 BEGIN
 	select Meals.Id,Meals.Name,Ingredients.Id, Ingredients.Name,MealIngredients.Ammount,MealIngredients.Format 
     from mealPlannerDb.Meals
@@ -78,7 +77,7 @@ BEGIN
     on mealPlannerDb.MealIngredients.IngredientId = mealPlannerDb.Ingredients.Id
     where mealPlannerDb.MealIngredients.MealId = MealId;
     
-END//
+END $
 
 DELIMITER ;
 -- add test Ingredients
