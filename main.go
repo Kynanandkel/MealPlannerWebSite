@@ -24,11 +24,15 @@ func main() {
 	http.ListenAndServe(":8080", nil)
 }
 
+func enableCors(w *http.ResponseWriter) {
+	(*w).Header().Set("Access-Control-Allow-Origin", "*")
+}
+
 // {"id":-,"name":"--","mealIngredients":[{"mealId":-,"ingredientId":-,"ingredientName":"--","ammount":-,"type":"--"}
 // {"id":69,"name":"test meal","mealIngredients":[{"mealId":69,"ingredientId":69,"ingredientName":"test","ammount":1,"type":"test type"}
 // {\"id\":69,\"Name\":\"test\",\"type\":\"testticle\"}
 func CreateIngredientHandler(w http.ResponseWriter, r *http.Request) {
-
+	enableCors(&w)
 	var Ingredient MealPlannerDatabase.Ingredient
 	err := json.NewDecoder(r.Body).Decode(&Ingredient)
 	if err != nil {
@@ -40,6 +44,7 @@ func CreateIngredientHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func GetAllIngredientsHandler(w http.ResponseWriter, r *http.Request) {
+	enableCors(&w)
 	ingredients, err := MealPlannerDatabase.GetAllIngredients()
 	if err != nil {
 		w.Write([]byte(err.Error()))
@@ -57,7 +62,7 @@ func GetAllIngredientsHandler(w http.ResponseWriter, r *http.Request) {
 // {"id":-,"name":"--","mealIngredients":[{"mealId":-,"ingredientId":-,"ingredientName":"--","ammount":-,"type":"--"}
 // {\"id\":69,\"name\":\"test meal\",\"type\":\"test type\",\"mealIngredients\":[{\"mealId\":69,\"ingredientId\":69,\"ingredientName\":\"test\",\"ammount\":1,\"type\":\"test type\"}]}
 func CreateMealHandler(w http.ResponseWriter, r *http.Request) {
-
+	enableCors(&w)
 	var Meal MealPlannerDatabase.Meal
 	err := json.NewDecoder(r.Body).Decode(&Meal)
 	if err != nil {
@@ -69,6 +74,7 @@ func CreateMealHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func GetAllMealsHandler(w http.ResponseWriter, r *http.Request) {
+	enableCors(&w)
 	meals, err := MealPlannerDatabase.GetAllMeals()
 	if err != nil {
 		w.Write([]byte(err.Error()))
